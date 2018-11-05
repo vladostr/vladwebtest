@@ -30,7 +30,7 @@
     <snapshotRepository>
         <id>snapshots</id>
         <name>rhel73test-snapshots</name>
-        <url>http://rhel73test:8081/artifactory/libs-snapshot</url>
+        <url>http://rhel73test:8081/artifactory/libs-snapshot-local</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
