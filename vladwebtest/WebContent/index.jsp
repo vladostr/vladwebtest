@@ -10,7 +10,7 @@
 </head>
 <body>
 	<h1>Current date and time is</h1>
-	<h2>daylight saving time in effect</h2>
+	<h2>daylight saving time in effect now</h2>
 	<%
 	SimpleDateFormat formatter=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	Date now=new Date();
