@@ -24,7 +24,7 @@ pipeline {
 					rtMaven.tool = 'myMaven-3'
 					rtMaven.deployer.artifactDeploymentPatterns.addInclude("*.war")
 					
-					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'package'
+					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'install -Dmaven.test.skip=true'
 					server.publishBuildInfo buildInfo
 				}
 				
