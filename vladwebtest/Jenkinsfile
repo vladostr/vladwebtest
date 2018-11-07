@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    tools{
+			maven 'myMaven-3'
+			jdk 'myJDK-1.8'
+		 }  
     stages {
         stage('Build') {
             when { branch 'master' }
@@ -8,11 +12,20 @@ pipeline {
                 sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
             }
         }
-        stage('Example Test') {
+        stage('Artifactory') {
             when { branch 'master' }
             steps {
-                echo 'Hello, JDK'
-                sh 'java -version'
+                echo '2. Load to Artifactory'
+                dir("$WORKSPACE/vladwebtest/target"){
+				script {
+					def server = Artifactory.server('http://rhel73test/artifactory')
+					def rtMaven = Artifactory.newMavenBuild()
+					rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
+					rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
+					rtMaven.tool = 'myMaven-3'
+					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'install'
+					server.publishBuildInfo buildInfo
+				}
             }
         }
     }
