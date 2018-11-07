@@ -3,7 +3,7 @@ pipeline {
     tools{
 			maven 'myMaven-3'
 			jdk 'myJDK-1.8'
-		 }
+		 }  
     stages {
         stage('Example Build') {
             when { branch 'master' }
