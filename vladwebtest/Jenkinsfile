@@ -16,7 +16,7 @@ pipeline {
             when { branch 'master' }
             steps {
                 echo '2. Load to Artifactory'
-                dir("$WORKSPACE/vladwebtest"){
+              
 					script {
 						def server = Artifactory.server('my_artifactory')
 						def rtMaven = Artifactory.newMavenBuild()
@@ -26,7 +26,7 @@ pipeline {
 						def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'install'
 						server.publishBuildInfo buildInfo
 					}
-				}
+				
             }
         }
     }
