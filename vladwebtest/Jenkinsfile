@@ -5,11 +5,11 @@ pipeline {
 			jdk 'myJDK-1.8'
 		 }  
     stages {
-        stage('Example Build') {
+        stage('Build') {
             when { branch 'master' }
             steps {
-                echo 'Hello, Maven'
-                sh 'mvn --version'
+                echo '1. Build'
+                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
             }
         }
         stage('Example Test') {
