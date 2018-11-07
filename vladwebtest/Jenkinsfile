@@ -1,10 +1,8 @@
 pipeline {
     agent any
     tools{
-			maven '/opt/apache-maven-3.5.4'
+			maven 'myMaven-3'
 			jdk 'myJDK-1.8'
-			git 'git'
-		 }
     stages {
         stage('Example Build') {
             when { branch 'master' }
