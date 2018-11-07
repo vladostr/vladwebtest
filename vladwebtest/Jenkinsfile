@@ -1,15 +1,11 @@
 pipeline {
     agent any
-    tools{
-			maven 'myMaven-3'
-			jdk 'myJDK-1.8'
-		 }  
     stages {
         stage('Build') {
             when { branch 'master' }
             steps {
                 echo '1. Build'
-                sh 'mvn clean package'
+                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
             }
         }
         stage('Example Test') {
