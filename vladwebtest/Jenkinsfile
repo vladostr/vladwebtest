@@ -9,7 +9,7 @@ pipeline {
             when { branch 'master' }
             steps {
                 echo '1. Build'
-                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
+                sh 'mvn clean package'
             }
         }
         stage('Example Test') {
