@@ -16,7 +16,7 @@ pipeline {
             when { branch 'master' }
             steps {
                 echo '2. Load to Artifactory'
-                dir("$WORKSPACE/vladwebtest/target"){
+                dir("$WORKSPACE/vladwebtest"){
 					script {
 						def server = Artifactory.server('my_artifactory')
 						def rtMaven = Artifactory.newMavenBuild()
