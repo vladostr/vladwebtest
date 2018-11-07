@@ -18,7 +18,7 @@ pipeline {
                 echo '2. Load to Artifactory'
                 dir("$WORKSPACE/vladwebtest/target"){
 					script {
-						def server = Artifactory.server('http://rhel73test/artifactory')
+						def server = Artifactory.server('my_artifactory')
 						def rtMaven = Artifactory.newMavenBuild()
 						rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
 						rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
