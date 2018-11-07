@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools{
-			maven 'myMaven-3'
+			maven '/opt/apache-maven-3.5.4'
 			jdk 'myJDK-1.8'
 			git 'git'
 		 }
