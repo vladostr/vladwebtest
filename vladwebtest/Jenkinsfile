@@ -15,7 +15,7 @@ pipeline {
         stage('Artifactory') {
             when { branch 'master' }
             steps {
-                echo '2. Load to Artifactory'
+                echo '2. Load Artifactory'
                 dir("$WORKSPACE/vladwebtest/target"){
 					script {
 						def server = Artifactory.server('http://rhel73test/artifactory')
