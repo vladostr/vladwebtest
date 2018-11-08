@@ -19,9 +19,7 @@ pipeline {
                 sh 'echo "Artifactory for $BRANCH"'
             }
         }
-	} 
-    stages {
-        stage('Build') {
+	   stage('Build') {
             when { branch 'master' }
             steps {
                 echo '1. Build'
