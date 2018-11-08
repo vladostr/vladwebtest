@@ -5,28 +5,28 @@ pipeline {
 			jdk 'myJDK-1.8'
 		 } 
 	stages{
-		stage('Build') {
+		stage('Build Dev') {
             when { branch 'dev*' }
             steps {
                 echo '1. Build'
                 sh 'echo "Build for $BRANCH"'
             }
         }
-        stage('Artifactory') {
+        stage('Artifactory Dev') {
             when { branch 'dev*' }
             steps {
                 echo '2. Load to Artifactory'
                 sh 'echo "Artifactory for $BRANCH"'
             }
         }
-	   stage('Build') {
+	   stage('Build Master') {
             when { branch 'master' }
             steps {
                 echo '1. Build'
                 sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
             }
         }
-        stage('Artifactory') {
+        stage('Artifactory master') {
             when { branch 'master' }
             steps {
                 echo '2. Load to Artifactory'
