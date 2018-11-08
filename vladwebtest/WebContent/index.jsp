@@ -11,6 +11,7 @@
 <body>
 	<h1>Current date and time is</h1>
 	<h2>daylight saving time in effect now</h2>
+	<h3>dev1</h3>
 	<%
 	SimpleDateFormat formatter=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	Date now=new Date();
