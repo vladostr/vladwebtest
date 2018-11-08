@@ -22,14 +22,14 @@ pipeline {
 	   stage('Build Master') {
             when { branch 'master' }
             steps {
-                echo '1. Build for $BRANCH_NAME'
+                sh 'echo "1. Build for $BRANCH_NAME"'
                 sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
             }
         }
         stage('Artifactory master') {
             when { branch 'master' }
             steps {
-                echo '2. Load to Artifactory for $BRANCH_NAME'
+                sh 'echo "2. Load to Artifactory for $BRANCH_NAME"'
 				script {
 					def server = Artifactory.server('my_artifactory')
 					def rtMaven = Artifactory.newMavenBuild()
