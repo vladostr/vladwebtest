@@ -9,27 +9,27 @@ pipeline {
             when { branch 'dev*' }
             steps {
                 echo '1. Build'
-                sh 'echo "Build for $BRANCH"'
+                sh 'echo "Build for $BRANCH_NAME"'
             }
         }
         stage('Artifactory Dev') {
             when { branch 'dev*' }
             steps {
                 echo '2. Load to Artifactory'
-                sh 'echo "Artifactory for $BRANCH"'
+                sh 'echo "Artifactory for $BRANCH_NAME"'
             }
         }
 	   stage('Build Master') {
             when { branch 'master' }
             steps {
-                echo '1. Build'
+                echo '1. Build for $BRANCH_NAME'
                 sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
             }
         }
         stage('Artifactory master') {
             when { branch 'master' }
             steps {
-                echo '2. Load to Artifactory'
+                echo '2. Load to Artifactory for $BRANCH_NAME'
 				script {
 					def server = Artifactory.server('my_artifactory')
 					def rtMaven = Artifactory.newMavenBuild()
