@@ -23,6 +23,7 @@ pipeline {
             when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
             	try {
+            		sh 'echo "NotifyBuild call"'
             		notifyBuild('STARTED')
 	                echo '1. Build for $BRANCH_NAME'
 	                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
@@ -59,6 +60,8 @@ pipeline {
 def notifyBuild(String buildStatus = 'STARTED') {
   // build status of null means successful
   buildStatus = buildStatus ?: 'SUCCESS'
+  
+  sh 'echo "Inside function"'
 
   // Default values
   def colorName = 'RED'
