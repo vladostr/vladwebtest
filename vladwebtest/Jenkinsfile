@@ -23,35 +23,26 @@ pipeline {
             when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
             	script {
-	            	try {
 	            		notifyBuild('STARTED')
-		                echo '1. Build for $BRANCH_NAME'
+		                sh "echo 'Build for $BRANCH_NAME started'"
 		                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
-		            }
-		            catch(e) {
-		            	currentBuild.result = "FAILED"
-	            		throw e
-		            }
-		            finally {
-		            	notifyBuild(currentBuild.result)
-		            }
 		        }
             }
             post {
 		        always {
-		            sh "echo 'One way or another, I have finished'"
+		            sh 'echo 'Build $BUILD_NUMBER for $BRANCH_NAME'comleted!"
 		        }
 		        success {
-		            sh "echo 'I succeeded!'"
+		            notifyBuild('SUCCESS')
 		        }
 		        unstable {
-		            sh "echo 'I am unstable :/'"
+		            notifyBuild('UNSTABLE')
 		        }
 		        failure {
-		            sh "echo 'I failed :('"
+		            notifyBuild('FAILURE')
 		        }
 		        changed {
-		            sh "echo 'Things were different before...'"
+		            notifyBuild('CHANGED')
 		        }
     		}    
         }
@@ -94,10 +85,6 @@ pipeline {
 }   
 
 def notifyBuild(String buildStatus = 'STARTED') {
-  // build status of null means successful
-  // x ? x : y
-  //buildStatus = buildStatus ?: 'SUCCESS'
-  
   // Default values
   def colorName = 'RED'
   def colorCode = '#FF0000'
@@ -116,6 +103,17 @@ def notifyBuild(String buildStatus = 'STARTED') {
     colorCode = '#00FF00'
     details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+  } elseif (buildStatus == 'UNSTABLE') {
+    color = 'BLUE'
+    colorCode = '#FFFF00'
+    details= """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' is <b>UNSTABLE</b>:</p>
+    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+  } else if (buildStatus == 'CHANGED') {
+  	color = 'BLUE'
+    colorCode = '#FFFF00'
+    details= """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was <b>CHANGED</b>:</p>
+    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+  
   } else {
     color = 'RED'
     colorCode = '#FF0000'
