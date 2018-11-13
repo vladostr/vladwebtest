@@ -27,6 +27,7 @@ pipeline {
             		notifyBuild('STARTED')
 	                echo '1. Build for $BRANCH_NAME'
 	                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
+	            }
 	            catch(e) {
 	            	currentBuild.result = "FAILED"
             		throw e
