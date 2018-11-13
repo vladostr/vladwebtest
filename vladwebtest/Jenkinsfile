@@ -30,7 +30,7 @@ pipeline {
             }
             post {
 		        always {
-		            sh 'echo 'Build $BUILD_NUMBER for $BRANCH_NAME'comleted!"
+		            sh "echo 'Build $BUILD_NUMBER for $BRANCH_NAME'comleted!"
 		        }
 		        success {
 		            notifyBuild('SUCCESS')
