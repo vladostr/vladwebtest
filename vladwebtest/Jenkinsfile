@@ -103,7 +103,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
     colorCode = '#00FF00'
     details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-  } elseif (buildStatus == 'UNSTABLE') {
+  } else if (buildStatus == 'UNSTABLE') {
     color = 'BLUE'
     colorCode = '#FFFF00'
     details= """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' is <b>UNSTABLE</b>:</p>
