@@ -25,7 +25,7 @@ pipeline {
             	script {
 	            		notifyBuild('STARTED')
 		                sh "echo 'Build for $BRANCH_NAME started'"
-		                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
+		                sh 'mvn clean package -f $WORKSPACE/vladwebtest1/pom.xml'
 		        }
             }
             post {
