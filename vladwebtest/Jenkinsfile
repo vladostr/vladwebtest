@@ -19,7 +19,7 @@ pipeline {
                 sh 'echo "Artifactory for $BRANCH_NAME"'
             }
         }
-	   stage('Build Master') {
+	    stage('Build Master') {
             when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
             	script {
@@ -37,6 +37,23 @@ pipeline {
 		            }
 		        }
             }
+            post {
+		        always {
+		            sh "echo 'One way or another, I have finished'"
+		        }
+		        success {
+		            sh "echo 'I succeeded!'"
+		        }
+		        unstable {
+		            sh "echo 'I am unstable :/'"
+		        }
+		        failure {
+		            sh "echo 'I failed :('"
+		        }
+		        changed {
+		            sh "echo 'Things were different before...'"
+		        }
+    		}    
         }
         stage('Artifactory master') {
            when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
@@ -55,23 +72,23 @@ pipeline {
 				}
 				
             }
-        }
-    }
-    post {
-        always {
-            sh "echo 'One way or another, I have finished'"
-        }
-        success {
-            sh "echo 'I succeeeded!'"
-        }
-        unstable {
-            sh "echo 'I am unstable :/'"
-        }
-        failure {
-            sh "echo 'I failed :('"
-        }
-        changed {
-            sh "echo 'Things were different before...'"
+            post {
+		        always {
+		            sh "echo 'One way or another, I have finished'"
+		        }
+		        success {
+		            sh "echo 'I succeeded!'"
+		        }
+		        unstable {
+		            sh "echo 'I am unstable :/'"
+		        }
+		        failure {
+		            sh "echo 'I failed :('"
+		        }
+		        changed {
+		            sh "echo 'Things were different before...'"
+		        }
+    		} 
         }
     }
 }   
