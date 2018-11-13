@@ -51,7 +51,7 @@ pipeline {
             steps {
 				script {
 					notifyBuild('STARTED')
-		            sh "echo 'Artifactory stage for build # $BUILD_NUMBER to ${artifactUrl}'"
+		            sh "echo 'Artifactory stage for build # $BUILD_NUMBER to ${agentName}'"
 					def server = Artifactory.server('my_artifactory')
 					def rtMaven = Artifactory.newMavenBuild()
 					rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
