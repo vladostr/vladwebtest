@@ -24,8 +24,8 @@ pipeline {
             steps {
             	script {
 	            		notifyBuild('STARTED')
-		                sh "echo 'Build for $BRANCH_NAME started'"
-		                sh 'mvn clean package -f $WORKSPACE/vladwebtest1/pom.xml'
+		                sh "echo 'Build # for $BUILD_NUMBER for branch $BRANCH_NAME started'"
+		                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
 		        }
             }
             post {
@@ -49,8 +49,9 @@ pipeline {
         stage('Artifactory master') {
            when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
-                echo '2. Load to Artifactory for $BRANCH_NAME'
 				script {
+					notifyBuild('STARTED')
+		            sh "echo 'Artifactory stage for build # $BUILD_NUMBER to ${artifactUrl}'"
 					def server = Artifactory.server('my_artifactory')
 					def rtMaven = Artifactory.newMavenBuild()
 					rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
@@ -65,19 +66,19 @@ pipeline {
             }
             post {
 		        always {
-		            sh "echo 'One way or another, I have finished'"
+		            sh "echo 'Upload build # $BUILD_NUMBER for branch $BRANCH_NAME' completed!"
 		        }
 		        success {
-		            sh "echo 'I succeeded!'"
+		            notifyBuild('SUCCESS')
 		        }
 		        unstable {
-		            sh "echo 'I am unstable :/'"
+		            notifyBuild('UNSTABLE')
 		        }
 		        failure {
-		            sh "echo 'I failed :('"
+		            notifyBuild('FAILURE')
 		        }
 		        changed {
-		            sh "echo 'Things were different before...'"
+		            notifyBuild('CHANGED')
 		        }
     		} 
         }
