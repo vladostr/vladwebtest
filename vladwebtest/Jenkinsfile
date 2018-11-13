@@ -22,19 +22,21 @@ pipeline {
 	   stage('Build Master') {
             when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
-            	try {
-            		sh 'echo "NotifyBuild call"'
-            		notifyBuild('STARTED')
-	                echo '1. Build for $BRANCH_NAME'
-	                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
-	            }
-	            catch(e) {
-	            	currentBuild.result = "FAILED"
-            		throw e
-	            }
-	            finally {
-	            	notifyBuild(currentBuild.result)
-	            }
+            	script {
+	            	try {
+	            		sh 'echo "NotifyBuild call"'
+	            		notifyBuild('STARTED')
+		                echo '1. Build for $BRANCH_NAME'
+		                sh 'mvn clean package -f $WORKSPACE/vladwebtest/pom.xml'
+		            }
+		            catch(e) {
+		            	currentBuild.result = "FAILED"
+	            		throw e
+		            }
+		            finally {
+		            	notifyBuild(currentBuild.result)
+		            }
+		        }
             }
         }
         stage('Artifactory master') {
