@@ -57,6 +57,23 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            sh "echo 'One way or another, I have finished'"
+        }
+        success {
+            sh "echo 'I succeeeded!'"
+        }
+        unstable {
+            sh "echo 'I am unstable :/'"
+        }
+        failure {
+            sh "echo 'I failed :('"
+        }
+        changed {
+            sh "echo 'Things were different before...'"
+        }
+    }
 }   
 
 def notifyBuild(String buildStatus = 'STARTED') {
