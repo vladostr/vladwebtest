@@ -54,8 +54,7 @@ pipeline {
 					def rtMaven = Artifactory.newMavenBuild()
 					
 					notifyBuild('STARTED')
-		            sh "echo 'Artifactory stage for build # $BUILD_NUMBER to '"+ rtMaven.agentName
-					
+		            sh "echo 'Artifactory stage for build # $BUILD_NUMBER to '"
 					rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
 					rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
 					rtMaven.tool = 'myMaven-3'
