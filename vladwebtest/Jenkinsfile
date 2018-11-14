@@ -74,14 +74,14 @@ pipeline {
 		            sh "echo 'Upload build # $BUILD_NUMBER for branch $BRANCH_NAME' completed!"
 		        }
 		        success {
-		            notifyBuild('SUCCESS')
+		            notifyBuild('SUCCESS','ARTIFACTORY')
 		            	        
 		        }
 		        unstable {
 		            notifyBuild('UNSTABLE')
 		        }
 		        failure {
-		            notifyBuild('FAILURE')
+		            notifyBuild('FAILURE','ARTIFACTORY')
 		        }
 		        changed {
 		            notifyBuild('CHANGED')
@@ -129,8 +129,13 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD') {
   } else {
     color = 'RED'
     colorCode = '#FF0000'
-    details= """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    if (step=='BUILD') {
+    	details= """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    } else if (step=='ARTIFACTORY'){
+    	details= """<p>Artifactory upload FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    }
   }
 
   emailext (
