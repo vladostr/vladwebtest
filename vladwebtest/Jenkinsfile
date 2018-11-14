@@ -67,7 +67,7 @@ pipeline {
 					//message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
 					message='kuku'
 					
-					env.success_message = message 
+					env.artifactory_success_message = message 
 					
 					server.publishBuildInfo buildInfo
 				}
@@ -121,7 +121,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD') {
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     } else if (step=='ARTIFACTORY'){
     	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}] was successfully deployed to Artifactory.':</p>
-    		<p>Browse it in Artifactory under &QUOT;<a href='${env.success_message}'></a>&QUOT;</p>"""
+    		<p>Browse it in Artifactory under &QUOT;<a href='${env.artifactory_success_message}'></a>&QUOT;</p>"""
     }
   } else if (buildStatus == 'UNSTABLE') {
     color = 'BLUE'
