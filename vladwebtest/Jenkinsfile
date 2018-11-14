@@ -101,7 +101,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD') {
   if (buildStatus == 'STARTED') {
     color = 'YELLOW'
     colorCode = '#FFFF00'
-    if step=='BUILD' {
+    if (step=='BUILD') {
     	details= """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     } else if step=='ARTIFACTORY'{
