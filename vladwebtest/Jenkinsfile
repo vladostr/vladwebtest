@@ -64,7 +64,8 @@ pipeline {
 					
 					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
 					
-					message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
+					//message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
+					message='kuku'
 					
 					env.success_message = message 
 					
@@ -77,8 +78,7 @@ pipeline {
 		            sh "echo 'Upload build # $BUILD_NUMBER for branch $BRANCH_NAME' completed!"
 		        }
 		        success {
-		            notifyBuild('SUCCESS','ARTIFACTORY')
-		            	        
+		            notifyBuild('SUCCESS','ARTIFACTORY') 	        
 		        }
 		        unstable {
 		            notifyBuild('UNSTABLE')
