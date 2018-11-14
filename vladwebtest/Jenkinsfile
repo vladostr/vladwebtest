@@ -4,9 +4,9 @@ pipeline {
 			maven 'myMaven-3'
 			jdk 'myJDK-1.8'
 		 } 
-	parameters {
-            string(name: 'success_message', defaultValue: '')
-        }
+	environment {
+        artifactory_success_message=''
+    }
 	stages{
 		stage('Build Dev') {
             when { branch 'dev*' }
@@ -63,7 +63,7 @@ pipeline {
 					rtMaven.deployer.artifactDeploymentPatterns.addInclude("*.war")
 					
 					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
-					
+										
 					//message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
 					message='kuku'
 					
