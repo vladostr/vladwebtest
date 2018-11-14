@@ -61,6 +61,8 @@ pipeline {
 					rtMaven.deployer.artifactDeploymentPatterns.addInclude("*.war")
 					
 					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
+					sh "echo '"+buildInfo.name+"'"
+					sh "echo '"+buildInfo.number+"'"
 					server.publishBuildInfo buildInfo
 				}
 				
