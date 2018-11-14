@@ -55,18 +55,18 @@ pipeline {
 				script {
 					def server = Artifactory.server('my_artifactory')
 					def rtMaven = Artifactory.newMavenBuild()
+					
 					notifyBuild('STARTED','ARTIFACTORY')
-		            sh "echo 'Artifactory stage for build # '+buildInfo.number+'''"
-					rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
+		           
+		           	rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
 					rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
 					rtMaven.tool = 'myMaven-3'
 					rtMaven.deployer.artifactDeploymentPatterns.addInclude("*.war")
 					
 					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
 										
-					//message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
-					message='kuku'
-					
+					message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
+										
 					env.artifactory_success_message = message 
 					
 					server.publishBuildInfo buildInfo
