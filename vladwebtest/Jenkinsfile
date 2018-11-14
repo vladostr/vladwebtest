@@ -52,7 +52,7 @@ pipeline {
 				script {
 					def server = Artifactory.server('my_artifactory')
 					def rtMaven = Artifactory.newMavenBuild()
-					notifyBuild('STARTED')
+					notifyBuild('STARTED','ARTIFACTORY')
 		            sh "echo 'Artifactory stage for build # '+buildInfo.number+'''"
 					rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
 					rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
@@ -87,7 +87,7 @@ pipeline {
     }
 }   
 
-def notifyBuild(String buildStatus = 'STARTED') {
+def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD') {
   // Default values
   def colorName = 'RED'
   def colorCode = '#FF0000'
@@ -99,8 +99,13 @@ def notifyBuild(String buildStatus = 'STARTED') {
   if (buildStatus == 'STARTED') {
     color = 'YELLOW'
     colorCode = '#FFFF00'
-    details= """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    if step=='BUILD' {
+    	details= """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    } else if step=='ARTIFACTORY'{
+    	details= """<p>Artifactory upload STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    }
   } else if (buildStatus == 'SUCCESS') {
     color = 'GREEN'
     colorCode = '#00FF00'
