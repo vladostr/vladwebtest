@@ -60,9 +60,9 @@ pipeline {
 					rtMaven.deployer.artifactDeploymentPatterns.addInclude("*.war")
 					
 					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
-					
-					sh 'echo "Build "+buildInfo.number+" was successfully deployed. Browse it in Artifactory under <a href='"+server.url+ "webapp/builds/"+buildInfo.name
-		             + "/"+buildInfo.number+"'>"	
+					message="Build "+buildInfo.number+" was successfully deployed. Browse it in Artifactory under <a href='"+server.url+ \
+					"webapp/builds/"+buildInfo.name + "/"+buildInfo.number+"'>"
+					sh 'echo "'+message+'"'
 					server.publishBuildInfo buildInfo
 				}
 				
