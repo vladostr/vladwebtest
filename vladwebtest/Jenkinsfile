@@ -68,6 +68,7 @@ pipeline {
 					message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
 										
 					env.artifactory_success_message = message 
+					sh "echo ${env.artifactory_success_message}"
 					
 					server.publishBuildInfo buildInfo
 				}
