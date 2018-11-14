@@ -4,6 +4,9 @@ pipeline {
 			maven 'myMaven-3'
 			jdk 'myJDK-1.8'
 		 } 
+	parameters {
+            string(name: 'success_message', defaultValue: '')
+        }
 	stages{
 		stage('Build Dev') {
             when { branch 'dev*' }
@@ -61,9 +64,9 @@ pipeline {
 					
 					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
 					
-					message="Build "+buildInfo.number+" was successfully deployed. Browse it in Artifactory under <a href='"+server.url+ \
-					"webapp/builds/"+buildInfo.name + "/"+buildInfo.number+"'/>"
-					sh "echo ':'+buildInfo.number+'''"
+					message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
+					
+					env.success_message = message 
 					
 					server.publishBuildInfo buildInfo
 				}
@@ -113,8 +116,13 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD') {
   } else if (buildStatus == 'SUCCESS') {
     color = 'GREEN'
     colorCode = '#00FF00'
-    details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    if (step=='BUILD'){
+    	details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    } else if (step=='ARTIFACTORY'){
+    	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}] was successfully deployed to Artifactory.':</p>
+    		<p>Browse it in Artifactory under &QUOT;<a href='${env.success_message}'></a>&QUOT;</p>"""
+    }
   } else if (buildStatus == 'UNSTABLE') {
     color = 'BLUE'
     colorCode = '#FFFF00'
