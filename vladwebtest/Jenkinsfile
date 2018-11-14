@@ -64,7 +64,7 @@ pipeline {
 					sh "echo '*********************************'"
 					sh "echo '"+buildInfo.name+"'"
 					sh "echo '"+buildInfo.number+"'"
-					sh "echo '"+buildInfo.vcsurl+"'"
+					
 					sh "echo '"+buildInfo.url+"'"
 					sh "echo '"+buildInfo.started+"'"
 					sh "echo '*********************************'"
