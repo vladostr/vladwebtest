@@ -105,7 +105,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     	details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     } else if (step=='ARTIFACTORY'){
-    	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}] was successfully deployed to Artifactory.':</p>
+    	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}] was successfully deployed to Artifactory.'</p>
     		<p>Browse it in Artifactory, using &QUOT;<a href='$param1'>this link</a>&QUOT;</p>"""
     }
   } else if (buildStatus == 'UNSTABLE') {
