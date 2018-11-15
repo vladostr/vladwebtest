@@ -68,6 +68,7 @@ pipeline {
 					message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
 										
 					env.artifactory_success_message = message 
+					sh "echo message"
 					sh "echo ${env.artifactory_success_message}"
 					
 					server.publishBuildInfo buildInfo
@@ -99,7 +100,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD') {
   // Default values
   def colorName = 'RED'
   def colorCode = '#FF0000'
-  def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+  def subject = step+" step ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
   def summary = "${subject} (${env.BUILD_URL})"
   def details 
 
