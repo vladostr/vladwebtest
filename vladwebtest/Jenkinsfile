@@ -57,7 +57,7 @@ pipeline {
 								           
 			           	rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
 						rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
-						rtMaven.tool = 'myMaven-31'
+						rtMaven.tool = 'myMaven-3'
 						rtMaven.deployer.artifactDeploymentPatterns.addInclude("*.war")
 						
 						def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
