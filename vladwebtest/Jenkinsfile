@@ -49,10 +49,9 @@ pipeline {
         stage('Artifactory master') {
             when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
-            	try {
-	    			notifyBuild('STARTED','ARTIFACTORY')
-	
-	   				script {
+            	script {
+            		try {
+	    				notifyBuild('STARTED','ARTIFACTORY')
 						def server = Artifactory.server('my_artifactory')
 						def rtMaven = Artifactory.newMavenBuild()
 								           
@@ -69,11 +68,11 @@ pipeline {
 						
 						notifyBuild('SUCCESS','ARTIFACTORY', message) 	
 					}
-	   			} 
-	   			catch (e) {
-				    currentBuild.result = "FAILED"
-				   	notifyBuild('FAILURE','ARTIFACTORY')
-				    throw e
+	   			 	catch (e) {
+					    currentBuild.result = "FAILED"
+					   	notifyBuild('FAILURE','ARTIFACTORY')
+					    throw e
+					}
 			  	}
 			}
         }
