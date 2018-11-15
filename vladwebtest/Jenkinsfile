@@ -5,7 +5,7 @@ pipeline {
 			jdk 'myJDK-1.8'
 		 } 
 	environment {
-        artifactory_success_message=''
+        artifactory_success_message='kuku'
     }
 	stages{
 		stage('Build Dev') {
@@ -65,7 +65,7 @@ pipeline {
 					
 					def buildInfo = rtMaven.run pom: '$WORKSPACE/vladwebtest/pom.xml', goals: 'clean install -U -Dmaven.test.skip=true'
 										
-					message=server.url+"webapp/builds/"+buildInfo.name + "/"+buildInfo.number
+					def message=server.url+"/webapp/builds/"+buildInfo.name + "/"+buildInfo.number
 										
 					env.artifactory_success_message = message 
 					sh "echo $message"
