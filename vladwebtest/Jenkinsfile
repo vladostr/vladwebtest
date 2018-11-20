@@ -23,10 +23,12 @@ pipeline {
         stage('SonarQube analysis') {
     		when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
     		steps{
-	    		def scannerHome = tool 'my-sonar-runner'
-	    		withSonarQubeEnv('my_sonarqube_server') {
-	      			sh "${scannerHome}/bin/sonar-runner.sh"
-	    		}
+    			script{
+		    		def scannerHome = tool 'my-sonar-runner'
+		    		withSonarQubeEnv('my_sonarqube_server') {
+		      			sh "${scannerHome}/bin/sonar-runner.sh"
+		    		}
+		    	}
     		}
 		}
         
