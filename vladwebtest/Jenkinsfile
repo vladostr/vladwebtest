@@ -24,9 +24,16 @@ pipeline {
     		when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
     		steps{
     			script{
-		    		def scannerHome = tool 'my-sonar-runner'
-		    		withSonarQubeEnv('my_sonarqube_server') {
-		      			sh "${scannerHome}/bin/sonar-runner"
+    				try{
+    					notifyBuild('STARTED','SonarQube analysis')
+			    		def scannerHome = tool 'my-sonar-runner'
+			    		withSonarQubeEnv('my_sonarqube_server') {
+			      			sh "${scannerHome}/bin/sonar-runner"
+			    		}
+		    		catch(e){
+		    			currentBuild.result = "FAILED"
+					   	notifyBuild('FAILURE','SonarQube analysis')
+					    throw e
 		    		}
 		    	}
     		}
@@ -110,7 +117,11 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     } else if (step=='ARTIFACTORY'){
     	details= """<p>Artifactory upload STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    } else if (step=='SonarQube analysis'){
+    	details= """<p>SonarQube analysis STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
+    
   } else if (buildStatus == 'SUCCESS') {
     color = 'GREEN'
     colorCode = '#00FF00'
@@ -120,6 +131,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     } else if (step=='ARTIFACTORY'){
     	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was successfully deployed to Artifactory.</p>
     		<p>Browse it in Artifactory, using <a href='$param1'>this link</a>.</p>"""
+    } else if (step=='SonarQube analysis'){
+    	details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
   } else if (buildStatus == 'UNSTABLE') {
     color = 'BLUE'
