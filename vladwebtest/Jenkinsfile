@@ -28,7 +28,7 @@ pipeline {
     					notifyBuild('STARTED','SonarQube analysis')
 			    		def scannerHome = tool 'my-sonar-runner'
 			    		withSonarQubeEnv('my_sonarqube_server') {
-			      			sh "${scannerHome}/bin/sonar-runner -D sonar.projectKey=vladwebtest -D sonar.sources='$WORKSPACE/vladwebtest/
+			      			sh "${scannerHome}/bin/sonar-runner -D sonar.projectKey=vladwebtest -D sonar.sources='$WORKSPACE/vladwebtest/'"
 			    		}
 			    	}
 		    		catch(e){
