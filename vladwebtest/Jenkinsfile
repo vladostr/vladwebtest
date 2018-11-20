@@ -28,13 +28,7 @@ pipeline {
     					notifyBuild('STARTED','SonarQube analysis')
 			    		def scannerHome = tool 'my-sonar-runner'
 			    		withSonarQubeEnv('my_sonarqube_server') {
-			      			sh "${scannerHome}/bin/sonar-runner"
-			    		}
-			    	}
-		    		catch(e){
-		    			currentBuild.result = "FAILED"
-					   	notifyBuild('FAILURE','SonarQube analysis')
-					    throw e
+			      			sh "${scannerHome}/bin/sonar-runner -D sonar.projectKey=vladwebtest -D sonar.sources='$WORKSPACE/vladwebtest/"
 		    		}
 		    	}
     		}
@@ -155,6 +149,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     } else if (step=='ARTIFACTORY'){
     	details= """<p>Artifactory upload FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    } else if (step=='SonarQube analysis'){
+    	details= """<p>SonarQube analysis stage FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
   }
