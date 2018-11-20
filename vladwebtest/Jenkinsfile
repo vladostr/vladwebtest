@@ -19,6 +19,17 @@ pipeline {
                 sh 'echo "Artifactory for $BRANCH_NAME"'
             }
         }
+        
+        stage('SonarQube analysis') {
+    		when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
+    		steps{
+	    		def scannerHome = tool 'my-sonar-runner';
+	    		withSonarQubeEnv('my_sonarqube_server') {
+	      			sh "${scannerHome}/bin/sonar-runner.sh"
+	    		}
+    		}
+		}
+        
 	    stage('Build Master') {
             when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
@@ -106,7 +117,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     } else if (step=='ARTIFACTORY'){
     	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was successfully deployed to Artifactory.</p>
-    		<p>Browse it in Artifactory, using <a href='$param1'>this link</a></p>"""
+    		<p>Browse it in Artifactory, using <a href='$param1'>this link</a>.</p>"""
     }
   } else if (buildStatus == 'UNSTABLE') {
     color = 'BLUE'
