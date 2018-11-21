@@ -27,8 +27,11 @@ pipeline {
     				try{
     					notifyBuild('STARTED','SonarQube analysis')
 			    		def scannerHome = tool 'my-sonar-runner'
+			    		
 			    		withSonarQubeEnv('my_sonarqube_server') {
 			      			sh "${scannerHome}/bin/sonar-runner -D sonar.projectKey=vladwebtest -D sonar.sources='$WORKSPACE/vladwebtest/'"
+			      			def message="http://localhost:9000/sonar/dashboard?id=vladwebtest"
+			      			notifyBuild('SUCCESS','SonarQube analysis', message)
 			    		}
 			    	}
 		    		catch(e){
@@ -133,8 +136,8 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was successfully deployed to Artifactory.</p>
     		<p>Browse it in Artifactory, using <a href='$param1'>this link</a>.</p>"""
     } else if (step=='SonarQube analysis'){
-    	details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    	details= """<p>ANALYSIS SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
     }
   } else if (buildStatus == 'UNSTABLE') {
     color = 'BLUE'
