@@ -100,14 +100,18 @@ pipeline {
 			  	}
 			}
         }
-        stage('Deploy to web  master') {
+        stage('Deploy to web on master') {
             when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
             steps {
             	script {
             		try {
 	    				notifyBuild('STARTED','DEPLOY')
+	    				//download artifact
 						def message="http://www.yahoo.com"
-						
+						sh "curl -o vladwebtest-0.0.1-SNAPSHOT.war http://rhel73test:5081/artifactory/libs-snapshot-local/vladwebtest-0.0.1-SNAPSHOT.war"
+						sh "$CATALINA_HOME/bin/shutdown.sh"
+						sh "cp vladwebtest-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps"
+						sh "$CATALINA_HOME/bin/startup.sh"
 						notifyBuild('SUCCESS','DEPLOY', message) 	
 					}
 	   			 	catch (e) {
