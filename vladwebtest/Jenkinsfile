@@ -122,6 +122,25 @@ pipeline {
 			  	}
 			}
         }
+        stage('Test deployed to web on master') {
+            when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
+            steps {
+            	script {
+            		try {
+	    				notifyBuild('STARTED','TEST')
+	    				
+	    				message=env.TOMCAT_URL+"/vladwebtest"
+						
+						notifyBuild('SUCCESS','TEST', message) 	
+					}
+	   			 	catch (e) {
+					    currentBuild.result = "FAILED"
+					   	notifyBuild('FAILURE','TEST')
+					    throw e
+					}
+			  	}
+			}
+        }
     }
 }   
 
