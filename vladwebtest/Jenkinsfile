@@ -168,6 +168,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     } else if (step=='DEPLOY'){
     	details= """<p>DEPLOY step STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    }else if (step=='TEST'){
+    	details= """<p>TEST step STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
     
   } else if (buildStatus == 'SUCCESS') {
@@ -183,6 +186,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     	details= """<p>ANALYSIS SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
     } else if (step=='DEPLOY'){
+    	details= """<p>DEPLOY SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
+    } else if (step=='TEST'){
     	details= """<p>DEPLOY SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
     }
@@ -211,6 +217,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
     else if (step=='DEPLOY'){
+    	details= """<p>DEPLOY FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    } else if (step=='TEST'){
     	details= """<p>DEPLOY FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
