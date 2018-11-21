@@ -100,6 +100,24 @@ pipeline {
 			  	}
 			}
         }
+        stage('Deploy to web  master') {
+            when { not { anyOf { branch 'dev1'; branch 'dev2' } } }
+            steps {
+            	script {
+            		try {
+	    				notifyBuild('STARTED','DEPLOY')
+						
+						
+						notifyBuild('SUCCESS','DEPLOY', message) 	
+					}
+	   			 	catch (e) {
+					    currentBuild.result = "FAILED"
+					   	notifyBuild('FAILURE','DEPLOY')
+					    throw e
+					}
+			  	}
+			}
+        }
     }
 }   
 
@@ -124,6 +142,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     } else if (step=='SonarQube analysis'){
     	details= """<p>SonarQube analysis STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    } else if (step=='DEPLOY'){
+    	details= """<p>DEPLOY step STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
     
   } else if (buildStatus == 'SUCCESS') {
@@ -137,6 +158,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     		<p>Browse it in Artifactory, using <a href='$param1'>this link</a>.</p>"""
     } else if (step=='SonarQube analysis'){
     	details= """<p>ANALYSIS SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
+    } else if (step=='DEPLOY'){
+    	details= """<p>DEPLOY SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
     }
   } else if (buildStatus == 'UNSTABLE') {
@@ -161,6 +185,10 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     } else if (step=='ARTIFACTORY'){
     	details= """<p>Artifactory upload FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    }
+    else if (step=='DEPLOY'){
+    	details= """<p>DEPLOY FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     }
   }
