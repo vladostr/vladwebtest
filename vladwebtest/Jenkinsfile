@@ -106,7 +106,7 @@ pipeline {
             	script {
             		try {
 	    				notifyBuild('STARTED','DEPLOY')
-						
+						def message="http://www.yahoo.com"
 						
 						notifyBuild('SUCCESS','DEPLOY', message) 	
 					}
