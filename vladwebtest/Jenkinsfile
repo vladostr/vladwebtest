@@ -107,11 +107,11 @@ pipeline {
             		try {
 	    				notifyBuild('STARTED','DEPLOY')
 	    				//download artifact
-						def message="http://www.yahoo.com"
+						def message="http://localhost:6080/vladwebtest"
 						sh "curl -o vladwebtest-0.0.1-SNAPSHOT.war http://rhel73test:5081/artifactory/libs-snapshot-local/vladwebtest-0.0.1-SNAPSHOT.war"
-						sh "$CATALINA_HOME/bin/shutdown.sh"
-						sh "cp vladwebtest-0.0.1-SNAPSHOT.war $CATALINA_HOME/webapps"
-						sh "$CATALINA_HOME/bin/startup.sh"
+						sh "'"+env.CATALINA_HOME+"/bin/shutdown.sh'"
+						sh "'cp vladwebtest-0.0.1-SNAPSHOT.war "+env.CATALINA_HOME+"/webapps'"
+						sh "'"+env.CATALINA_HOME+"/bin/startup.sh'"
 						notifyBuild('SUCCESS','DEPLOY', message) 	
 					}
 	   			 	catch (e) {
