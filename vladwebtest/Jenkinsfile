@@ -109,9 +109,9 @@ pipeline {
 	    				//download artifact
 	    				message=env.TOMCAT_URL+"/vladwebtest"
 						sh "curl -o vladwebtest-0.0.1-SNAPSHOT.war http://rhel73test:5081/artifactory/libs-snapshot-local/vladwebtest-0.0.1-SNAPSHOT.war"
-						sh "'"+env.TOMCAT_HOME+"/bin/catalina.sh stop'"
+						sh env.TOMCAT_HOME+"/bin/catalina.sh stop"
 						sh "'cp vladwebtest-0.0.1-SNAPSHOT.war "+env.TOMCAT_HOME+"/webapps'"
-						sh "'"+env.TOMCAT_HOME+"/bin/catalina.sh start'"
+						sh env.TOMCAT_HOME+"/bin/catalina.sh start"
 						notifyBuild('SUCCESS','DEPLOY', message) 	
 					}
 	   			 	catch (e) {
