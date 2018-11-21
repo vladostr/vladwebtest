@@ -30,7 +30,7 @@ pipeline {
 			    		
 			    		withSonarQubeEnv('my_sonarqube_server') {
 			      			sh "${scannerHome}/bin/sonar-runner -D sonar.projectKey=vladwebtest:vladwebtest -D sonar.sources='$WORKSPACE/vladwebtest/'"
-			      			def message="http://localhost:9000/sonar/dashboard?id=vladwebtest:vladwebtest"
+			      			def message=env.SONARQUBE_SERVER_URL+"/dashboard?id=vladwebtest:vladwebtest"
 			      			notifyBuild('SUCCESS','SonarQube analysis', message)
 			    		}
 			    	}
