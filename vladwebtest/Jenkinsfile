@@ -266,7 +266,7 @@ def GetRecepients(branch){
 	
 	if (last_pos>=0)
 		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
-	echo "KUKU"
+	echo trailing_str
 	if (trailing_str=="int"){
 		receipient_list=env.RTP_FULL_RECIPIENT_LIST
 	}
