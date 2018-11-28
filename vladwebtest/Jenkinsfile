@@ -262,8 +262,9 @@ def GetRecepients(branch){
 	branch=branch.toLowerCase()
 	echo "hear 2"
 	last_pos=branch.lastIndexOf(".")+1
+	echo last_pos
 	trailing_str=branch
-	
+	echo branch
 	if (last_pos>=0)
 		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
 	echo trailing_str
