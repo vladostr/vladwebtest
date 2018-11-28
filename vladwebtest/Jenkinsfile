@@ -138,7 +138,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   }
 
   
-  if (step=='TEST'){  
+  if (step=='TEST') AND (buildStatus != 'STARTED') {  
 	    emailext ( 
 	    	mimeType: 'text/html',
 	    	subject:subject,
