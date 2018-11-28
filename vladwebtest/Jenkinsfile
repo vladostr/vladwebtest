@@ -254,3 +254,18 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 	    )
   }
 }
+
+def GetRecepients(){
+	def receipient_list=null
+	def branch=$BRANCH_NAME
+	def training_str=
+	
+	if (lastNChars(branch,4).toLowerCase()==".int"){
+		receipient_list=env.RTP_FULL_RECIPIENT_LIST
+	}
+	
+}
+
+def lastNChars(String input, int n){
+  return n > input?.size() ? null : n ? input[-n..-1] : ''
+}
