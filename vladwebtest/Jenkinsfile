@@ -202,7 +202,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
     } 
     else if (step=='TEST'){
-    	subject=
+    	subject="Selenium: Job '${env.JOB_NAME}' Status: currentBuild.result Tests: passed"
     } 
   } else if (buildStatus == 'UNSTABLE') {
     color = 'BLUE'
@@ -232,7 +232,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     	details= """<p>DEPLOY FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
     } else if (step=='TEST'){
-    	subject="Selenium: Job '${env.JOB_NAME}' Status: currentBuild.result Tests: passed"
+    	subject="Selenium: Job '${env.JOB_NAME}' Status: currentBuild.result Tests: failed"
     }
   }
 
