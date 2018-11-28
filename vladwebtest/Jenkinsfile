@@ -249,7 +249,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   } else {
     	emailext (
 	      subject: subject,
-	      body: details+"\n\ "+$DEFAULT_RECIPIENTS,
+	      body: details+"\n "+$DEFAULT_RECIPIENTS,
 	      recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   }
