@@ -166,8 +166,9 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   def subject = step+" step ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
   def summary = "${subject} (${env.BUILD_URL})"
   def details 
+  
   branch="$BRANCH_NAME"
-  echo branch
+  
   // Override default values based on build status
   if (buildStatus == 'STARTED') {
     color = 'YELLOW'
@@ -251,7 +252,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   } else {
     	emailext (
 	      subject: subject,
-	      body: details+"\n "+GetRecepients(param1),
+	      body: details+"\n "+GetRecepients(branch),
 	      recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   }
