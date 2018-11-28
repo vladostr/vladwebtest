@@ -282,8 +282,9 @@ def GetRecepients(branch){
 		}
 	}
 	else{
-		recepient_list=[[$class: 'RequesterRecipientProvider']]
 		echo "KUKU"
+		recepient_list=[[$class: 'RequesterRecipientProvider']]
+		
 	}		
 	return recepient_list
 }
