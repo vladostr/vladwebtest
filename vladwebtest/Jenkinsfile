@@ -28,7 +28,7 @@ pipeline {
     		steps{
     			script{
     				try{
-    					notifyBuild('STARTED','SonarQube analysis')
+    					notifyBuild('STARTED','SonarQube analysis',$BRANCH_NAME)
 			    		def scannerHome = tool 'my-sonar-runner'
 			    		
 			    		withSonarQubeEnv('my_sonarqube_server') {
@@ -249,16 +249,15 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   } else {
     	emailext (
 	      subject: subject,
-	      body: details+"\n "+GetRecepients(),
+	      body: details+"\n "+GetRecepients(param1),
 	      recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   }
 }
 
-def GetRecepients(){
+def GetRecepients(branch){
 	def receipient_list=null
-	def branch=$BRANCH_NAME
-		
+			
 	branch=branch.toLowerCase()
 	last_pos=branch.lastindexof(".")+1
 	trailing_str=branch
