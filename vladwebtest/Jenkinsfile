@@ -28,6 +28,7 @@ pipeline {
     		steps{
     			script{
     				try{
+    					sh 'echo "Scanning for $BRANCH_NAME"'
     					notifyBuild('STARTED','SonarQube analysis',$BRANCH_NAME)
 			    		def scannerHome = tool 'my-sonar-runner'
 			    		
