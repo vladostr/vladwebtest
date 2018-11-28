@@ -29,7 +29,7 @@ pipeline {
     			script{
     				try{
     					sh 'echo "Scanning for $BRANCH_NAME"'
-    					notifyBuild('STARTED','SonarQube analysis',$BRANCH_NAME)
+    					notifyBuild('STARTED','SonarQube analysis')
 			    		def scannerHome = tool 'my-sonar-runner'
 			    		
 			    		withSonarQubeEnv('my_sonarqube_server') {
@@ -166,7 +166,8 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   def subject = step+" step ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
   def summary = "${subject} (${env.BUILD_URL})"
   def details 
-  echo "$BRANCH_NAME"
+  branch="$BRANCH_NAME"
+  echo branch
   // Override default values based on build status
   if (buildStatus == 'STARTED') {
     color = 'YELLOW'
