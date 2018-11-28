@@ -249,7 +249,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   } else {
     	emailext (
 	      subject: subject,
-	      body: details+"\n "+env.RTP_FULL_RECIPIENT_LIST,
+	      body: details+"\n "+GetRecepients(),
 	      recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   }
@@ -258,12 +258,32 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 def GetRecepients(){
 	def receipient_list=null
 	def branch=$BRANCH_NAME
-	def training_str=
+		
+	branch=branch.toLowerCase()
+	last_pos=branch.lastindexof(".")+1
+	trailing_str=branch
+	if (last_pos>=0)
+		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
 	
-	if (lastNChars(branch,4).toLowerCase()==".int"){
+	if (trailing_str=="int"){
 		receipient_list=env.RTP_FULL_RECIPIENT_LIST
 	}
-	
+	else if (trailing_str.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
+		receipient_list=env.RTP_FULL_RECIPIENT_LIST
+	}
+	else if (env.RTP_FULL_RECIPIENT_LIST.toLowerCase().contains(trailing_str)) {
+		emails=env.RTP_FULL_RECIPIENT_LIST.toLowerCase().split(",")
+		for (e in emails) {
+    		if (e.contains(trailing_str)){
+    			recepient_list=e
+    			break
+    		}
+		}
+	}
+	else{
+		recepient_list=[[$class: 'RequesterRecipientProvider']]
+	}		
+	return recepient_list
 }
 
 def lastNChars(String input, int n){
