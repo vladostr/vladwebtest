@@ -259,7 +259,7 @@ def GetRecepients(branch){
 	def receipient_list=null
 			
 	branch=branch.toLowerCase()
-	last_pos=branch.lastindexof(".")+1
+	last_pos=branch.lastIndexOf(".")+1
 	trailing_str=branch
 	if (last_pos>=0)
 		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
