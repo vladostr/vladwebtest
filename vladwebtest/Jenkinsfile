@@ -269,7 +269,8 @@ def GetRecepients(branch){
 	
 	if (trailing_str.contains(".")){
 		last_pos=trailing_str.lastIndexOf(".")+1
-		trailing_str=lastNChars(trailing_str,trailing_str.length()-last_pos)
+		def n=trailing_str.length()-last_pos
+	    trailing_str=n > trailing_str?.size() ? null : n ? trailing_str[-n..-1] : ''
 	}
 	
 	if (trailing_str=="int"){
@@ -294,8 +295,4 @@ def GetRecepients(branch){
 	}		
 	
 	return recepient_list
-}
-
-def lastNChars(String input, int n){
-  return n > input?.size() ? null : n ? input[-n..-1] : ''
 }
