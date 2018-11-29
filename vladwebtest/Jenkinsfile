@@ -268,8 +268,8 @@ def GetRecepients(branch){
 	trailing_str="my.branch.for.GhostRiders.int"
 	
 	if (trailing_str.contains(".")){
-		last_pos=branch.lastIndexOf(".")+1
-		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
+		last_pos=trailing_str.lastIndexOf(".")+1
+		trailing_str=lastNChars(trailing_str,trailing_str.length()-last_pos)
 	}
 	
 	if (trailing_str=="int"){
