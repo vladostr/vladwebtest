@@ -255,7 +255,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     	emailext (
     	  to: recipient_list,
 	      subject: subject,
-	      body: details
+	      body: details,
 	      recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   }
