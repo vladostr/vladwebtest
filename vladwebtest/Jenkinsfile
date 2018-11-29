@@ -290,9 +290,9 @@ def GetRecepients(branch){
 	}
 	else{
 		
-		recepient_list=""
+		receipient_list=""
 		
 	}		
 	
-	return recepient_list
+	return receipient_list
 }
