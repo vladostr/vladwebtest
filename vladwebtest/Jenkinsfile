@@ -261,7 +261,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 }
 
 def GetRecepients(branch){
-	def receipient_list=""
+	def recipient_list=""
 	def last_pos=-1
 	def trailing_str=branch.toLowerCase()
 	
@@ -270,37 +270,44 @@ def GetRecepients(branch){
 	if (trailing_str.length()>=10) {
 		def last_10=trailing_str[-10..-1]
 		if (last_10.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
-			receipient_list=env.RTP_FULL_RECIPIENT_LIST
-			return receipient_list
+			recipient_list=env.RTP_FULL_RECIPIENT_LIST
+			return recipient_list
 		}
 	}
 	
 	if (trailing_str.length()>=9) {
 		def last_9=trailing_str[-9..-1]
 		if (last_9.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
-			receipient_list=env.RTP_FULL_RECIPIENT_LIST
-			return receipient_list
+			recipient_list=env.RTP_FULL_RECIPIENT_LIST
+			return recipient_list
 		}
 	}
 	
 	if (trailing_str.length()>=3){
 		def last_3=trailing_str[-3..-1]
 		if (last_3=="int"){
-			receipient_list=env.RTP_FULL_RECIPIENT_LIST
-			return receipient_list
+			recipient_list=env.RTP_FULL_RECIPIENT_LIST
+			return recipient_list
 		}
 	}
 	
-	if (env.RTP_FULL_RECIPIENT_LIST.toLowerCase().contains(trailing_str)) {
-		emails=env.RTP_FULL_RECIPIENT_LIST.toLowerCase().split(",")
-		for (e in emails) {
-    		if (e.contains(trailing_str)){
-    			recepient_list=e
-    			break
-    		}
-    		return receipient_list
-		}
-	}
+	if (trailing_str.contains(".")) {
+		last_pos=trailing_str.lastIndexOf(".")+1
+		def n=trailing_str.length()-last_pos
+		trailing_str=trailing_str[-n..-1]
+		trailing_str=trailing_str.toLowerCase()
+		
+		if (RTP_FULL_RECIPIENT_LIST.toLowerCase().contains(trailing_str)){
+			def emails=RTP_FULL_RECIPIENT_LIST.toLowerCase().split(",")
+			for (e in emails) {
+			    if (e.contains(trailing_str)){
+	    			recipient_list=e
+	    			break
+	    		}
+			}
+			return recipient_list
+		 }
+    }
 	
-	return receipient_list
+	return recipient_list
 }
