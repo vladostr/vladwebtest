@@ -263,14 +263,10 @@ def GetRecepients(branch){
 	def last_pos=-1
 	def trailing_str=branch.toLowerCase()
 	
-	echo trailing_str
-	echo last_pos
 	if (trailing_str.contains(".")){
 		last_pos=branch.lastIndexOf(".")
 		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
 	}
-	echo trailing_str
-	echo last_pos
 	
 	if (trailing_str=="int"){
 		receipient_list=env.RTP_FULL_RECIPIENT_LIST
