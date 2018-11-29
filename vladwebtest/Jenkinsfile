@@ -258,7 +258,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 	      body: details
 	    )
   }*/
-  
+  	echo recipient_list
   	if (recipient_list== "") {
 		emailext ( 
 	    	mimeType: 'text/html',
@@ -274,10 +274,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 	      body: details
 	    )
   	}
-  
 }
-
-
 
 def GetRecepients(branch){
 	def recipient_list=""
