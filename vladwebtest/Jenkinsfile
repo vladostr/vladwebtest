@@ -260,13 +260,13 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 
 def GetRecepients(branch){
 	def receipient_list=null
-	echo "I am hear"		
+	echo branch	
 	branch=branch.toLowerCase()
-	echo "hear 2"
+	echo branch
 	last_pos=branch.lastIndexOf(".")+1
 	echo last_pos
 	trailing_str=branch
-	echo branch
+	echo trailing_str
 	if (last_pos>=0)
 		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
 	echo trailing_str
