@@ -265,7 +265,7 @@ def GetRecepients(branch){
 	def last_pos=-1
 	def trailing_str=branch.toLowerCase()
 	
-	trailing_str="my.branch.for.GhostRiders.int"
+	trailing_str="my.branch.for.GhostRiders.18.4.0-17"
 	
 	if (trailing_str.length()>=3){
 		def last_3=trailing_str[-3..-1]
