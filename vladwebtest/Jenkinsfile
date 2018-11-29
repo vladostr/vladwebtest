@@ -260,23 +260,23 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 
 def GetRecepients(branch){
 	def receipient_list=null
+	def last_pos
+	def trailing_str
 	
 	branch=branch.toLowerCase()
+	echo branch
 	
 	last_pos=branch.lastIndexOf(".")
-	if (last_pos==null){
-		echo -1
-	}
-	else {
-	  echo "Here"
-	}
+	
 	echo "last position"
 	echo last_pos
 	trailing_str=branch
 	echo trailing_str
-	if (last_pos>=0)
+	if (last_pos>=0){
 		trailing_str=lastNChars(branch,branch.length()-last_pos+1)
-	echo trailing_str
+		echo trailing_str
+	}
+	
 	if (trailing_str=="int"){
 		receipient_list=env.RTP_FULL_RECIPIENT_LIST
 	}
