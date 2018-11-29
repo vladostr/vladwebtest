@@ -291,6 +291,7 @@ def GetRecepients(branch){
 		recepient_list=[[$class: 'RequesterRecipientProvider']]
 		
 	}		
+	echo recepient_list
 	return recepient_list
 }
 
