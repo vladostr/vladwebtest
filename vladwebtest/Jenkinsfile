@@ -271,33 +271,36 @@ def GetRecepients(branch){
 		def last_10=trailing_str[-10..-1]
 		if (last_10.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
 			receipient_list=env.RTP_FULL_RECIPIENT_LIST
+			return receipient_list
 		}
 	}
-	else if (trailing_str.length()>=9) {
+	
+	if (trailing_str.length()>=9) {
 		def last_9=trailing_str[-9..-1]
 		if (last_9.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
 			receipient_list=env.RTP_FULL_RECIPIENT_LIST
+			return receipient_list
 		}
 	}
-	else if (trailing_str.length()>=3){
+	
+	if (trailing_str.length()>=3){
 		def last_3=trailing_str[-3..-1]
 		if (last_3=="int"){
 			receipient_list=env.RTP_FULL_RECIPIENT_LIST
+			return receipient_list
 		}
 	}
-	else if (env.RTP_FULL_RECIPIENT_LIST.toLowerCase().contains(trailing_str)) {
+	
+	if (env.RTP_FULL_RECIPIENT_LIST.toLowerCase().contains(trailing_str)) {
 		emails=env.RTP_FULL_RECIPIENT_LIST.toLowerCase().split(",")
 		for (e in emails) {
     		if (e.contains(trailing_str)){
     			recepient_list=e
     			break
     		}
+    		return receipient_list
 		}
 	}
-	else{
-		
-		receipient_list=""
-	}		
 	
 	return receipient_list
 }
