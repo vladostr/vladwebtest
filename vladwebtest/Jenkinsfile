@@ -160,120 +160,108 @@ pipeline {
 }   
 
 def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String param1='') {
-  // Default values
-  def colorName = 'RED'
-  def colorCode = '#FF0000'
-  def subject = step+" step ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
-  def summary = "${subject} (${env.BUILD_URL})"
-  def details 
-  
-  branch="$BRANCH_NAME"
-  
-  // Override default values based on build status
-  if (buildStatus == 'STARTED') {
-    color = 'YELLOW'
-    colorCode = '#FFFF00'
-    if (step=='BUILD') {
-    	details= """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    } else if (step=='ARTIFACTORY'){
-    	details= """<p>Artifactory upload STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    } else if (step=='SonarQube analysis'){
-    	details= """<p>SonarQube analysis STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    } else if (step=='DEPLOY'){
-    	details= """<p>DEPLOY step STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    }else if (step=='TEST'){
-    	details= """<p>Selenium test step STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    }
-    
-  } else if (buildStatus == 'SUCCESS') {
-    color = 'GREEN'
-    colorCode = '#00FF00'
-    if (step=='BUILD'){
-    	details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    } else if (step=='ARTIFACTORY'){
-    	details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was successfully deployed to Artifactory.</p>
-    		<p>Browse it in Artifactory, using <a href='$param1'>this link</a>.</p>"""
-    } else if (step=='SonarQube analysis'){
-    	details= """<p>ANALYSIS SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
-    } else if (step=='DEPLOY'){
-    	details= """<p>DEPLOY SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
-    } 
-    else if (step=='TEST'){
-    	subject="Selenium: Job '${env.JOB_NAME}' Status: currentBuild.result Tests: passed"
-    } 
-  } else if (buildStatus == 'UNSTABLE') {
-    color = 'BLUE'
-    colorCode = '#FFFF00'
-    details= """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' is <b>UNSTABLE</b>:</p>
-    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-  } else if (buildStatus == 'CHANGED') {
-  	color = 'BLUE'
-    colorCode = '#FFFF00'
-    details= """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was <b>CHANGED</b>:</p>
-    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-  
-  } else {
-    color = 'RED'
-    colorCode = '#FF0000'
-    if (step=='BUILD') {
-    	details= """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    } else if (step=='SonarQube analysis'){
-    	details= """<p>SonarQube analysis step FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    } else if (step=='ARTIFACTORY'){
-    	details= """<p>Artifactory upload FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    }
-    else if (step=='DEPLOY'){
-    	details= """<p>DEPLOY FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-    } else if (step=='TEST'){
-    	subject="Selenium: Job '${env.JOB_NAME}' Status: currentBuild.result Tests: failed"
-    }
-  }
 
-  def recipient_List = GetRecepients(branch)
-    
-  /*if ((step=='TEST') && (buildStatus != 'STARTED')) {  
-	    emailext ( 
-	    	mimeType: 'text/html',
-	    	subject:subject,
-	        body: '${FILE,path="var/emailable-report.html"}', 
-	        recipientProviders: [[$class: 'RequesterRecipientProvider']]
-	    )
-  } 
-  else {
-    	emailext (
-    	  to: recipient_list,
-	      subject: subject,
-	      body: details
-	    )
-  }*/
-  	echo recipient_list
+	// Default values
+	def colorName = 'RED'
+	def colorCode = '#FF0000'
+	def subject = step+" step ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+	def summary = "${subject} (${env.BUILD_URL})"
+	def details 
+	  
+	branch="$BRANCH_NAME"
+	  
+	// Override default values based on build status
+	if (buildStatus == 'STARTED') {
+		color = 'YELLOW'
+		colorCode = '#FFFF00'
+		if (step=='BUILD') {
+			details= """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    			<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+		} else if (step=='ARTIFACTORY'){
+    		details= """<p>Artifactory upload STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    			<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    	} else if (step=='SonarQube analysis'){
+    		details= """<p>SonarQube analysis STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    			<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    	} else if (step=='DEPLOY'){
+    		details= """<p>DEPLOY step STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    			<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    	}else if (step=='TEST'){
+    		details= """<p>Selenium test step STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    			<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+    	}
+	} 
+	else if (buildStatus == 'SUCCESS') {
+		color = 'GREEN'
+		colorCode = '#00FF00'
+		if (step=='BUILD'){
+			details= """<p>SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+				<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+		} else if (step=='ARTIFACTORY'){
+			details= """<p>Build '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was successfully deployed to Artifactory.</p>
+				<p>Browse it in Artifactory, using <a href='$param1'>this link</a>.</p>"""
+		} else if (step=='SonarQube analysis'){
+			details= """<p>ANALYSIS SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+				<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
+		} else if (step=='DEPLOY'){
+			details= """<p>DEPLOY SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+				<p>You can browse report, using, using <a href='$param1'>this link</a>.</p>"""
+		} else if (step=='TEST'){
+			subject="Selenium: Job '${env.JOB_NAME}' Status: currentBuild.result Tests: passed"
+		} 
+	} 
+	else if (buildStatus == 'UNSTABLE') {
+	    color = 'BLUE'
+	    colorCode = '#FFFF00'
+	    details= """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' is <b>UNSTABLE</b>:</p>
+	    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+	} else if (buildStatus == 'CHANGED') {
+	  	color = 'BLUE'
+	    colorCode = '#FFFF00'
+	    details= """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' was <b>CHANGED</b>:</p>
+	    	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+	  
+	} else {
+	    color = 'RED'
+	    colorCode = '#FF0000'
+	    if (step=='BUILD') {
+	    	details= """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+	    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+	    } 
+	    else if (step=='SonarQube analysis'){
+	    	details= """<p>SonarQube analysis step FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+	    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+	    } 
+	    else if (step=='ARTIFACTORY'){
+	    	details= """<p>Artifactory upload FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+	    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+	    }
+	    else if (step=='DEPLOY'){
+	    	details= """<p>DEPLOY FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+	    		<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+	    } 
+	    else if (step=='TEST'){
+	    	subject="Selenium: Job '${env.JOB_NAME}' Status: currentBuild.result Tests: failed"
+	    }
+	}
+
+	def recipient_list = GetRecepients(branch)
+
   	if (recipient_list== "") {
 		emailext ( 
 	    	mimeType: 'text/html',
 	    	subject:subject,
 	        body: details, 
 	        recipientProviders: [[$class: 'RequesterRecipientProvider']])
-	}
-  	else {
-  		emailext (
-  		  mimeType: 'text/html',
-    	  to: recipient_list,
-	      subject: subject,
-	      body: details
-	    )
   	}
+	else {
+		emailext (
+		  mimeType: 'text/html',
+		  to: recipient_list,
+		  subject: subject,
+		  body: details
+		)
+	}
 }
 
 def GetRecepients(branch){
