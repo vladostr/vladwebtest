@@ -249,13 +249,14 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 	    	mimeType: 'text/html',
 	    	subject:subject,
 	        body: '${FILE,path="var/emailable-report.html"}', 
-	        recipientProviders: recepient_list
+	        recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   } else {
     	emailext (
+    	  to: recepient_list
 	      subject: subject,
 	      body: details
-	      recipientProviders: recepient_list
+	      recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   }
 }
