@@ -241,24 +241,46 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     }
   }
 
-  def returnedList = GetRecepients(branch)
+  def recipient_List = GetRecepients(branch)
   def recipient_list = (returnedList != "") ? returnedList : [[$class: 'RequesterRecipientProvider']]
   
-  if ((step=='TEST') && (buildStatus != 'STARTED')) {  
+  /*if ((step=='TEST') && (buildStatus != 'STARTED')) {  
 	    emailext ( 
 	    	mimeType: 'text/html',
 	    	subject:subject,
 	        body: '${FILE,path="var/emailable-report.html"}', 
 	        recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
-  } else {
+  } 
+  else {
     	emailext (
     	  to: recipient_list,
 	      subject: subject,
 	      body: details
 	    )
-  }
+  }*/
+  
+  	if (recipient_list== "") {
+		emailext ( 
+	    	mimeType: 'text/html',
+	    	subject:subject,
+	        body: details, 
+	        recipientProviders: [[$class: 'RequesterRecipientProvider']])
+	}
+  	else {
+  		emailext (
+  		  mimeType: 'text/html',
+    	  to: recipient_list,
+	      subject: subject,
+	      body: details
+	    )
+  	}
+  
+  
+  
 }
+
+
 
 def GetRecepients(branch){
 	def recipient_list=""
