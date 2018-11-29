@@ -263,7 +263,13 @@ def GetRecepients(branch){
 	
 	branch=branch.toLowerCase()
 	
-	last_pos=branch.lastIndexOf(".")+1
+	last_pos=branch.lastIndexOf(".")
+	if (last_pos==-1){
+		echo -1
+	}
+	else {
+	  echo ">"+last_pos+"<"
+	}
 	echo "last position"
 	echo last_pos
 	trailing_str=branch
