@@ -255,7 +255,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
     	emailext (
 	      subject: subject,
 	      body: details+"\n "+GetRecepients(branch),
-	      recipientProviders: recepient_list
+	      recipientProviders: [[$class: 'RequesterRecipientProvider']]
 	    )
   }
 }
@@ -264,6 +264,8 @@ def GetRecepients(branch){
 	def receipient_list=null
 	def last_pos=-1
 	def trailing_str=branch.toLowerCase()
+	
+	trailing_str="my.branch.for.GhostRiders.int"
 	
 	if (trailing_str.contains(".")){
 		last_pos=branch.lastIndexOf(".")
