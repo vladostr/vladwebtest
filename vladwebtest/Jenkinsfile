@@ -242,8 +242,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
   }
 
   def recipient_List = GetRecepients(branch)
-  def recipient_list = (returnedList != "") ? returnedList : [[$class: 'RequesterRecipientProvider']]
-  
+    
   /*if ((step=='TEST') && (buildStatus != 'STARTED')) {  
 	    emailext ( 
 	    	mimeType: 'text/html',
@@ -275,8 +274,6 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 	      body: details
 	    )
   	}
-  
-  
   
 }
 
