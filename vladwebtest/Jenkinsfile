@@ -265,23 +265,23 @@ def GetRecepients(branch){
 	def last_pos=-1
 	def trailing_str=branch.toLowerCase()
 	
-	//trailing_str="my.branch.for.GhostRiders.int"
+	trailing_str="my.branch.for.GhostRiders.int"
 	
 	if (trailing_str.length()>=3){
 		def last_3=trailing_str[-3..-1]
-		if (trailing_str=="int"){
+		if (last_3=="int"){
 			receipient_list=env.RTP_FULL_RECIPIENT_LIST
 		}
 	}
 	else if (trailing_str.length()>=9) {
 		def last_9=trailing_str[-9..-1]
-		if (trailing_str.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
+		if (last_9.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
 			receipient_list=env.RTP_FULL_RECIPIENT_LIST
 		}
 	}
 	else if (trailing_str.length()>=10) {
-		def last_9=trailing_str[-10..-1]
-		if (trailing_str.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
+		def last_10=trailing_str[-10..-1]
+		if (last_10.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
 			receipient_list=env.RTP_FULL_RECIPIENT_LIST
 		}
 	}
