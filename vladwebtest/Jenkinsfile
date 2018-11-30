@@ -258,7 +258,7 @@ def notifyBuild(String buildStatus = 'STARTED', String step= 'BUILD', String par
 	else {
 		emailext (
 		  mimeType: 'text/html',
-		  from: "Jenkins_Notification_Service"
+		  from: "Jenkins_Notification_Service",
 		  to: recipient_list,
 		  subject: subject,
 		  body: details
