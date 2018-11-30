@@ -274,7 +274,7 @@ def GetRecepients(branch){
 	
 	if (trailing_str.length()>=10) {
 		def last_10=trailing_str[-10..-1]
-		if (last_10.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
+		if (last_10.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d+")) {
 			recipient_list=env.RTP_FULL_RECIPIENT_LIST
 			return recipient_list
 		}
@@ -282,7 +282,7 @@ def GetRecepients(branch){
 	
 	if (trailing_str.length()>=9) {
 		def last_9=trailing_str[-9..-1]
-		if (last_9.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d\\d")) {
+		if (last_9.matches("\\d\\d\\.\\d\\.\\d{1,2}-\\d+")) {
 			recipient_list=env.RTP_FULL_RECIPIENT_LIST
 			return recipient_list
 		}
